@@ -1089,6 +1089,7 @@ class _TablaFoliosState extends State<TablaFolios> {
         categoryModel.fileFoto3 = category['fileFoto3'];
         categoryModel.fileFoto4 = category['fileFoto4'];
         categoryModel.fileFoto5 = category['fileFoto5'];
+        categoryModel.fotoAviso = category['fotoAviso'];
         categoryModel.ClaveEtniaIndigena = category['ClaveEtniaIndigena'];
         categoryModel.OrdenEtniaIndigena = category['OrdenEtniaIndigena'];
         categoryModel.EtniaIndigena = category['EtniaIndigena'];
@@ -1134,7 +1135,8 @@ class _TablaFoliosState extends State<TablaFolios> {
               categoryModel.otroAdicciones,
               widget.usuario,
               categoryModel.dispositivo,
-              categoryModel.orden);
+              categoryModel.orden,
+              categoryModel.fotoAviso);
         } catch (error) {
           print('error en sulud'.toUpperCase());
           print(error);

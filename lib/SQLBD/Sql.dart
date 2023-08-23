@@ -735,7 +735,8 @@ class Sql {
       otroAdicciones,
       usuario,
       dispositivo,
-      orden) async {
+      orden,
+      fotoAviso) async {
     try {
       var res = await SqlConn.writeData(
           "EXEC dbo.SP_insertarSaludPertenenciaIndigena @folio = '$folio'," +
@@ -760,7 +761,7 @@ class Sql {
               "@otroCapacidadDiferente = '$otroCapacidadDiferente'," +
               "@otroAdicciones = '$otroAdicciones'," +
               "@usuario = '$usuario'," +
-              "@dispositivo = '$dispositivo', @orden = '$orden'");
+              "@dispositivo = '$dispositivo', @orden = '$orden',@fotoAviso = $fotoAviso");
 
       print('Listo salud');
       return res;
