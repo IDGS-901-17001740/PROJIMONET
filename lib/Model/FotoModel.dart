@@ -6,12 +6,15 @@ class FotoModel {
   String usuario;
   String dispositivo;
 
+  String firma;
+
   FotoModel(
       {this.folio,
       this.fileFoto,
       this.folioDisp,
       this.dispositivo,
-      this.usuario});
+      this.usuario,
+      this.firma});
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
@@ -19,7 +22,8 @@ class FotoModel {
       'fileFoto': fileFoto,
       'folioDisp': folioDisp,
       'dispositivo': dispositivo,
-      'usuario': usuario
+      'usuario': usuario,
+      'firma': firma
     };
     return map;
   }
@@ -31,5 +35,6 @@ class FotoModel {
     folioDisp = map['folioDisp'];
     dispositivo = map['dispositivo'];
     usuario = map['usuario'];
+    firma = map['firma'];
   }
 }

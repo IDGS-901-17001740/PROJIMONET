@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:esn/Comm/comHelper.dart';
 import 'package:esn/Comm/genTextFolio.dart';
@@ -8,25 +10,16 @@ import 'package:esn/Model/AlimentacionModel.dart';
 import 'package:esn/Model/AportacionSemanal.dart';
 import 'package:esn/Model/CaracteristicasCasa.dart';
 import 'package:esn/Model/DatosGeneralesModel.dart';
-import 'package:esn/Model/EscolaridadSeguridadSocial.dart';
 import 'package:esn/Model/EstadoCasaConstruccionModel.dart';
-import 'package:esn/Model/EstructuraFamiliarModel.dart';
 import 'package:esn/Model/FotoModel.dart';
-import 'package:esn/Model/Salud_PertenenciaIndigenaTablaModel.dart';
 import 'package:esn/Model/ServiciosModel.dart';
-import 'package:esn/Model/ServiciosModel/ServAguaModel.dart';
-import 'package:esn/Model/ServiciosModel/ServBanoModel.dart';
-import 'package:esn/Model/ServiciosModel/ServGasModel.dart';
-import 'package:esn/Model/ServiciosModel/ServLuzModel.dart';
-import 'package:esn/Model/ServiciosModel/ServSanitarioModel.dart';
-import 'package:esn/Model/TipoZona.dart';
-import 'package:esn/Screens/Resolucion.dart';
 import 'package:esn/Screens/TablaFolios.dart';
 import 'package:esn/services/Utility.dart';
-import 'package:esn/services/category_services.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
+import 'dart:ui' as ui;
 
 class Fotografia extends StatefulWidget {
   String folio;
@@ -42,6 +35,7 @@ class Fotografia extends StatefulWidget {
 }
 
 class _FotografiaState extends State<Fotografia> {
+  GlobalKey<SfSignaturePadState> _signaturePadStateKey = GlobalKey();
   File _image;
   final picker = ImagePicker();
   final _ponderacion1 = TextEditingController();
@@ -570,14 +564,20 @@ class _FotografiaState extends State<Fotografia> {
     });
   }
 
-  guardarFoto() {
+  guardarFoto() async {
     String foto64 = Utility.base64String(_image.readAsBytesSync());
+    ui.Image firma = await _signaturePadStateKey.currentState.toImage();
+    ByteData byteData = await firma.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData.buffer.asUint8List();
+    String firmaBase64 = base64Encode(pngBytes);
+
     FotoModel BModel = FotoModel(
         folio: int.parse(widget.folio),
         fileFoto: foto64,
         dispositivo: widget.dispositivo,
         folioDisp: widget.folioDisp,
-        usuario: widget.usuario);
+        usuario: widget.usuario,
+        firma: firmaBase64);
     DbHelper().saveFoto(BModel).then((fotoModel) {
       alertDialog(context, "Se registro correctamente");
       Navigator.pushAndRemoveUntil(
@@ -684,6 +684,15 @@ class _FotografiaState extends State<Fotografia> {
                     ),
                   ),
                 ),
+                SfSignaturePad(
+                  key:_signaturePadStateKey,
+                  backgroundColor: Colors.grey,
+                  minimumStrokeWidth: 4.0,
+                  maximumStrokeWidth: 6.0,
+                ),
+                ElevatedButton(onPressed: () async {
+                  _signaturePadStateKey.currentState.clear();
+                }, child: Text('Limpiar')),
                 Container(
                   margin: EdgeInsets.all(20.0),
                   width: double.infinity,
