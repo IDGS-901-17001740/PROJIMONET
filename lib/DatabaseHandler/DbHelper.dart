@@ -991,6 +991,8 @@ class DbHelper {
     return await connection.query(table);
   }
   /////////////////////////////////////
+  
+  
 
   Future<UserModel> getLoginUser(String userId, String password) async {
     var dbClient = await db;
@@ -999,6 +1001,7 @@ class DbHelper {
         "txt_contrasena_usu = '$password'");
 
     if (res.length > 0) {
+      
       return UserModel.fromMap(res.first);
     }
 

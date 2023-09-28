@@ -684,11 +684,16 @@ class _FotografiaState extends State<Fotografia> {
                     ),
                   ),
                 ),
-                SfSignaturePad(
-                  key:_signaturePadStateKey,
-                  backgroundColor: Colors.grey,
-                  minimumStrokeWidth: 4.0,
-                  maximumStrokeWidth: 6.0,
+                SizedBox(height: 10),
+                Text('Firma'),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SfSignaturePad(
+                    key:_signaturePadStateKey,
+                    backgroundColor: Colors.grey,
+                    minimumStrokeWidth: 10.0,
+                    maximumStrokeWidth: 10.0,
+                  ),
                 ),
                 ElevatedButton(onPressed: () async {
                   _signaturePadStateKey.currentState.clear();
